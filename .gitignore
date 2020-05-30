@@ -52,9 +52,8 @@ local.properties
 
 # STS-specific
 /.sts4-cache/*
-
 ######################
-# IntelliJ
+# Intellij
 ######################
 .idea/
 *.iml

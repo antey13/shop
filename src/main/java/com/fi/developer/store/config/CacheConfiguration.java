@@ -9,16 +9,10 @@ import com.hazelcast.core.Hazelcast;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 
 import org.springframework.cache.CacheManager;
-
-import org.springframework.boot.info.BuildProperties;
-import org.springframework.boot.info.GitProperties;
-import org.springframework.cache.interceptor.KeyGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
-import io.github.jhipster.config.cache.PrefixedKeyGenerator;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -32,8 +26,6 @@ import javax.annotation.PreDestroy;
 @Configuration
 @EnableCaching
 public class CacheConfiguration {
-    private GitProperties gitProperties;
-    private BuildProperties buildProperties;
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
 
@@ -160,18 +152,4 @@ public class CacheConfiguration {
         return mapConfig;
     }
 
-    @Autowired(required = false)
-    public void setGitProperties(GitProperties gitProperties) {
-        this.gitProperties = gitProperties;
-    }
-
-    @Autowired(required = false)
-    public void setBuildProperties(BuildProperties buildProperties) {
-        this.buildProperties = buildProperties;
-    }
-
-    @Bean
-    public KeyGenerator keyGenerator() {
-        return new PrefixedKeyGenerator(this.gitProperties, this.buildProperties);
-    }
 }

@@ -38,7 +38,6 @@ public class WebConfigurer implements ServletContextInitializer {
         if (env.getActiveProfiles().length != 0) {
             log.info("Web application configuration, using profiles: {}", (Object[]) env.getActiveProfiles());
         }
-
         log.info("Web application fully configured");
     }
 

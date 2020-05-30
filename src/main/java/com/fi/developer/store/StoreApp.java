@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.core.env.Environment;
@@ -27,6 +28,7 @@ import java.util.Collection;
 )
 @SpringBootApplication
 @EnableConfigurationProperties({ApplicationProperties.class})
+@EnableDiscoveryClient
 public class StoreApp {
 
     private static final Logger log = LoggerFactory.getLogger(StoreApp.class);
