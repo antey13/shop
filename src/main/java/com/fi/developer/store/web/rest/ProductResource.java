@@ -2,6 +2,7 @@ package com.fi.developer.store.web.rest;
 
 import com.fi.developer.store.domain.Product;
 import com.fi.developer.store.repository.ProductRepository;
+import com.fi.developer.store.service.UaaClient;
 import com.fi.developer.store.web.rest.errors.BadRequestAlertException;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -13,10 +14,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -40,9 +39,11 @@ public class ProductResource {
     private String applicationName;
 
     private final ProductRepository productRepository;
+    private final UaaClient uaaClient;
 
-    public ProductResource(ProductRepository productRepository) {
+    public ProductResource(ProductRepository productRepository, UaaClient uaaClient) {
         this.productRepository = productRepository;
+        this.uaaClient = uaaClient;
     }
 
     /**
@@ -60,7 +61,16 @@ public class ProductResource {
         }
         Product result = productRepository.save(product);
         return ResponseEntity.created(new URI("/api/products/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId()))
+            .body(result);
+    }
+
+    @PostMapping("/{id}/addToCart")
+    public ResponseEntity<Product> createCart(@PathVariable String id) throws URISyntaxException {
+        log.debug("REST request to add Product with id : {}", id);
+        Product result = uaaClient.createCart(productRepository.findById(id).get());
+        return ResponseEntity.created(new URI("/api/products/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId()))
             .body(result);
     }
 
@@ -81,7 +91,7 @@ public class ProductResource {
         }
         Product result = productRepository.save(product);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, product.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, product.getId()))
             .body(result);
     }
 
@@ -121,6 +131,7 @@ public class ProductResource {
     @DeleteMapping("/products/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
         log.debug("REST request to delete Product : {}", id);
+
         productRepository.deleteById(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id)).build();
     }

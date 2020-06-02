@@ -65,10 +65,4 @@ public class SecurityConfiguration extends ResourceServerConfigurerAdapter {
         customizer.customize(restTemplate);
         return restTemplate;
     }
-
-    @Bean
-    @Qualifier("vanillaRestTemplate")
-    public RestTemplate vanillaRestTemplate() {
-        return new RestTemplate();
-    }
 }

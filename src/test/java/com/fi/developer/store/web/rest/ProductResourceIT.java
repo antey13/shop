@@ -27,7 +27,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link ProductResource} REST controller.
  */
 @SpringBootTest(classes = { SecurityBeanOverrideConfiguration.class, StoreApp.class })
-
 @AutoConfigureMockMvc
 @WithMockUser
 public class ProductResourceIT {
@@ -85,7 +84,6 @@ public class ProductResourceIT {
     @Test
     public void createProduct() throws Exception {
         int databaseSizeBeforeCreate = productRepository.findAll().size();
-
         // Create the Product
         restProductMockMvc.perform(post("/api/products").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
@@ -128,6 +126,7 @@ public class ProductResourceIT {
 
         // Create the Product, which fails.
 
+
         restProductMockMvc.perform(post("/api/products").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(product)))
@@ -144,6 +143,7 @@ public class ProductResourceIT {
         product.setPrice(null);
 
         // Create the Product, which fails.
+
 
         restProductMockMvc.perform(post("/api/products").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
@@ -183,7 +183,6 @@ public class ProductResourceIT {
             .andExpect(jsonPath("$.amount").value(DEFAULT_AMOUNT))
             .andExpect(jsonPath("$.price").value(DEFAULT_PRICE.intValue()));
     }
-
     @Test
     public void getNonExistingProduct() throws Exception {
         // Get the product
@@ -222,8 +221,6 @@ public class ProductResourceIT {
     @Test
     public void updateNonExistingProduct() throws Exception {
         int databaseSizeBeforeUpdate = productRepository.findAll().size();
-
-        // Create the Product
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restProductMockMvc.perform(put("/api/products").with(csrf())
