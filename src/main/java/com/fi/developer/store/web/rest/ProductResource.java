@@ -67,10 +67,11 @@ public class ProductResource {
 
     @PostMapping("/{id}/addToCart")
     public ResponseEntity<Product> createCart(@PathVariable String id) throws URISyntaxException {
-        log.debug("REST request to add Product with id : {}", id);
-        Product result = uaaClient.createCart(productRepository.findById(id).get());
-        return ResponseEntity.created(new URI("/api/products/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId()))
+        Product product = productRepository.findById(id).get();
+        log.debug("REST request to add Product with id : {}", product);
+        Product result = uaaClient.createCart(product);
+        return ResponseEntity.created(new URI("/api/products/" + id))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, id))
             .body(result);
     }
 

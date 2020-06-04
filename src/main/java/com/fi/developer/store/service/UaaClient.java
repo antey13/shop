@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@AuthorizedUserFeignClient(name = "auth", decode404 = true/*, fallback = UaaClientFallback.class*/)
+@AuthorizedUserFeignClient(name = "cart"/*, fallback = UaaClientFallback.class*/)
 public interface UaaClient {
 
     @RequestMapping(method = RequestMethod.POST, value = "/api/addProduct")
